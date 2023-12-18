@@ -1,8 +1,3 @@
-" start_screen.vim: show any text as a "start screen".
-"
-" http://code.arp242.net/startscreen.vim
-"
-" See the bottom of this file for copyright & license information.
 
 
 "##########################################################
@@ -17,19 +12,22 @@ set cpo&vim
 "##########################################################
 " Options
 
-" The default function; show a fortune
-fun! startscreen#fortune()
-	let l:fortune = systemlist('fortune -a')
-	call append('0', ['', ''] + map(l:fortune, '"        " . v:val'))
-	:1
-	redraw!
+fun! startscreen#open_file()
+    let l:file_path = '~/AppData/Local/nvim/Dashboard.txt'
+    execute 'edit ' . l:file_path
 
-	" Moar fortunes! :-)
-	nnoremap <buffer> <silent> <Return> :enew<CR>:call startscreen#start()<CR>
+    " Calculate the number of lines in the buffer
+    let l:num_lines = line('$') - line('1') + 1
+
+    " Calculate the middle of the buffer
+    let l:middle_line = l:num_lines / 2
+
+    " Scroll to the middle of the buffer
+    execute 'normal! ' . l:middle_line . 'H'
 endfun
 
 if !exists('g:Startscreen_function')
-	let g:Startscreen_function = function('startscreen#fortune')
+    let g:Startscreen_function = function('startscreen#open_file')
 endif
 
 
@@ -79,8 +77,8 @@ endfun
 "##########################################################
 " Auto command
 augroup startscreen
-	autocmd!
-	autocmd VimEnter * call startscreen#start()
+    autocmd!
+    autocmd VimEnter * call startscreen#start()
 augroup end
 
 
@@ -88,24 +86,3 @@ let &cpo = s:save_cpo
 unlet s:save_cpo
 
 
-" The MIT License (MIT)
-"
-" Copyright © 2016 Martin Tournoij
-"
-" Permission is hereby granted, free of charge, to any person obtaining a copy
-" of this software and associated documentation files (the "Software"), to
-" deal in the Software without restriction, including without limitation the
-" rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-" sell copies of the Software, and to permit persons to whom the Software is
-" furnished to do so, subject to the following conditions:
-"
-" The above copyright notice and this permission notice shall be included in
-" all copies or substantial portions of the Software.
-"
-" The software is provided "as is", without warranty of any kind, express or
-" implied, including but not limited to the warranties of merchantability,
-" fitness for a particular purpose and noninfringement. In no event shall the
-" authors or copyright holders be liable for any claim, damages or other
-" liability, whether in an action of contract, tort or otherwise, arising
-" from, out of or in connection with the software or the use or other dealings
-" in the software.
